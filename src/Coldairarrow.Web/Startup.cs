@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using System;
 using System.Linq;
 using System.Reflection;
@@ -38,8 +39,8 @@ namespace Coldairarrow.Web
             .AddControllersAsServices();
             services.AddScoped<IHttpContextAccessor, HttpContextAccessor>();
             services.AddTransient<IActionContextAccessor, ActionContextAccessor>();
-            services.AddSingleton(Configuration);
-            services.AddLogging();
+			services.AddSingleton(Configuration);
+			services.AddLogging();
 
             //使用Autofac替换自带IOC
             var builder = InitAutofac();

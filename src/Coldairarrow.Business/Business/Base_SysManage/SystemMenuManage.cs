@@ -74,7 +74,7 @@ namespace Coldairarrow.Business.Base_SysManage
                 });
             });
 
-            if (GlobalSwitch.RunModel == RunModel.LocalTest)
+            if (GlobalSwitch.RunModel == RunModel.LocalTest || GlobalSwitch.RunModel==RunModel.Publish)
             {
                 Menu developMenu = new Menu
                 {

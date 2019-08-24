@@ -1,4 +1,5 @@
 ﻿using Coldairarrow.Util;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System.Linq;
@@ -202,5 +203,16 @@ namespace Coldairarrow.Web
         {
             return Request.Path.ToString().ToLower().Contains(subUrl.ToLower());
         }
+
+		/// <summary>
+		/// 获取客户端IP地址
+		/// </summary>
+		/// <returns></returns>
+		public string GetUserIp()
+		{
+			//获取客户端IP地址
+			var remoteIpAddress = HttpContext.Features.Get<IHttpConnectionFeature>()?.RemoteIpAddress;
+			return remoteIpAddress.ToString();
+		}
     }
 }

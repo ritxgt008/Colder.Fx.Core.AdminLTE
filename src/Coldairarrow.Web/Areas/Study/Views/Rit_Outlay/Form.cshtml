@@ -1,0 +1,155 @@
+﻿@using Coldairarrow.Entity.Study;
+@using Coldairarrow.Util;
+
+@{
+    Layout = "~/Views/Shared/_Layout_Form.cshtml";
+
+    var obj = (Rit_Outlay)Model;
+    var objStr = Html.Raw(obj.ToJson());
+}
+<div style="padding:15px;padding-right:45px;">
+    <form id="form" class="form-horizontal" role="form">
+        
+        <div class="form-group form-group-sm">
+            <label class="col-sm-2 control-label">项目ID号</label>
+            <div class="col-sm-5">
+                <input name="ProjectID" value="@obj.ProjectID" type="text" class="form-control" required>
+                <div class="help-block with-errors"></div>
+            </div>
+        </div>
+        <div class="form-group form-group-sm">
+            <label class="col-sm-2 control-label">经费项目ID号</label>
+            <div class="col-sm-5">
+                <input name="FundID" value="@obj.FundID" type="text" class="form-control" required>
+                <div class="help-block with-errors"></div>
+            </div>
+        </div>
+        <div class="form-group form-group-sm">
+            <label class="col-sm-2 control-label">支出名称</label>
+            <div class="col-sm-5">
+                <input name="Name" value="@obj.Name" type="text" class="form-control" required>
+                <div class="help-block with-errors"></div>
+            </div>
+        </div>
+        <div class="form-group form-group-sm">
+            <label class="col-sm-2 control-label">支出金额</label>
+            <div class="col-sm-5">
+                <input name="OAmount" value="@obj.OAmount" type="text" class="form-control" required>
+                <div class="help-block with-errors"></div>
+            </div>
+        </div>
+        <div class="form-group form-group-sm">
+            <label class="col-sm-2 control-label">备注</label>
+            <div class="col-sm-5">
+                <input name="Remark" value="@obj.Remark" type="text" class="form-control" required>
+                <div class="help-block with-errors"></div>
+            </div>
+        </div>
+        <div class="form-group form-group-sm">
+            <label class="col-sm-2 control-label">支出时间</label>
+            <div class="col-sm-5">
+                <input name="OTime" value="@obj.OTime" type="text" class="form-control" required>
+                <div class="help-block with-errors"></div>
+            </div>
+        </div>
+        <div class="form-group form-group-sm">
+            <label class="col-sm-2 control-label">创建用户</label>
+            <div class="col-sm-5">
+                <input name="CreateUser" value="@obj.CreateUser" type="text" class="form-control" required>
+                <div class="help-block with-errors"></div>
+            </div>
+        </div>
+        <div class="form-group form-group-sm">
+            <label class="col-sm-2 control-label">创建用户</label>
+            <div class="col-sm-5">
+                <input name="CreateUserID" value="@obj.CreateUserID" type="text" class="form-control" required>
+                <div class="help-block with-errors"></div>
+            </div>
+        </div>
+        <div class="form-group form-group-sm">
+            <label class="col-sm-2 control-label">创建地址</label>
+            <div class="col-sm-5">
+                <input name="CreateIP" value="@obj.CreateIP" type="text" class="form-control" required>
+                <div class="help-block with-errors"></div>
+            </div>
+        </div>
+        <div class="form-group form-group-sm">
+            <label class="col-sm-2 control-label">创建时间</label>
+            <div class="col-sm-5">
+                <input name="CreateTime" value="@obj.CreateTime" type="text" class="form-control" required>
+                <div class="help-block with-errors"></div>
+            </div>
+        </div>
+        <div class="form-group form-group-sm">
+            <label class="col-sm-2 control-label">更新用户</label>
+            <div class="col-sm-5">
+                <input name="UpdateUser" value="@obj.UpdateUser" type="text" class="form-control" required>
+                <div class="help-block with-errors"></div>
+            </div>
+        </div>
+        <div class="form-group form-group-sm">
+            <label class="col-sm-2 control-label">更新用户</label>
+            <div class="col-sm-5">
+                <input name="UpdateUserID" value="@obj.UpdateUserID" type="text" class="form-control" required>
+                <div class="help-block with-errors"></div>
+            </div>
+        </div>
+        <div class="form-group form-group-sm">
+            <label class="col-sm-2 control-label">更新地址</label>
+            <div class="col-sm-5">
+                <input name="UpdateIP" value="@obj.UpdateIP" type="text" class="form-control" required>
+                <div class="help-block with-errors"></div>
+            </div>
+        </div>
+        <div class="form-group form-group-sm">
+            <label class="col-sm-2 control-label">更新时间</label>
+            <div class="col-sm-5">
+                <input name="UpdateTime" value="@obj.UpdateTime" type="text" class="form-control" required>
+                <div class="help-block with-errors"></div>
+            </div>
+        </div>
+        <div class="form-group">
+            <button id="submit" type="submit" class="hidden">提交</button>
+        </div>
+    </form>
+</div>
+<script>
+    var theEntity = @objStr;
+
+    $(function () {
+        initEvent();
+    });
+
+    //事件绑定
+    function initEvent() {
+        //表单校验
+        $('#form').validator().on('submit', function (e) {
+            //校验成功
+            if (!e.isDefaultPrevented()) {
+                e.preventDefault();
+
+                var values = $('#form').getValues();
+                
+                $.extend(theEntity, values);
+                loading();
+                $.postJSON('/Study/Rit_Outlay/SaveData', theEntity, function (resJson) {
+                    loading(false);
+
+                    if (resJson.Success) {
+                        parent.$('#dataTable').bootstrapTable('refresh');
+                        parent.dialogSuccess();
+                        dialogClose();
+                    }
+                    else {
+                        dialogError(resJson.Msg);
+                    }
+                });
+            }
+        })
+    }
+
+    //提交表单
+    function submitForm() {
+        $('#submit').trigger('click');
+    }
+</script>
